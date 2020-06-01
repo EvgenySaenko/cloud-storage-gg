@@ -1,6 +1,5 @@
 package server;
 
-import common.CallbackInfo;
 import common.CommandsList;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,12 +7,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 
-public class FileHandler extends ChannelInboundHandlerAdapter implements CallbackInfo {
-    @Override
-    public void execute() {
-        System.out.println("Началась обработка команды");
-
-    }
+public class FileHandler extends ChannelInboundHandlerAdapter {
 
     private Runnable callback = () -> {
         System.out.println("Операция завершена");
