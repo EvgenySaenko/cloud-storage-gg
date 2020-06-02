@@ -39,9 +39,11 @@ public class Network {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(new FIleHandler());
                             currentChannel = socketChannel;
+
                         }
                     });
             ChannelFuture channelFuture = clientBootstrap.connect().sync();
+            System.out.println("Клиент подключился");
             connectionOpened.countDown();
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {

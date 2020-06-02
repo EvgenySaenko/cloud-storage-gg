@@ -20,11 +20,12 @@ public class Server {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             //добавили хэндлер который получает данные-указав директорию хранения файлов
-                            ch.pipeline().addLast(new FileHandler());
+                            ch.pipeline().addLast(new Handler());
 
                         }
                     });
             ChannelFuture f = b.bind(8189).sync();
+            System.out.println("Сервер запущен");
             f.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();

@@ -5,8 +5,15 @@ import common.FileSender;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,9 +21,19 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
-public class ClientApp {
+public class ClientApp extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        primaryStage.setTitle("Cloud Storage");
+        primaryStage.setScene(new Scene(root,1100,550));
+        primaryStage.show();
+    }
 
     public static void main(String[] args) {
+        launch(args);
+
         CountDownLatch connectionOpened = new CountDownLatch(1);
         new Thread(() ->  Network.getInstance().start(connectionOpened)).start();
         try {
@@ -74,4 +91,6 @@ public class ClientApp {
         buf.writeBytes(filenameBytes);//само имя
         outChannel.writeAndFlush(buf);
     }
+
+
 }

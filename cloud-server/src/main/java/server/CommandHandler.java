@@ -16,7 +16,7 @@ public class CommandHandler {
     private int receivedLength;
     private StringBuilder cmd;//создадим стрингбилдер, чтобы собрать строку
 
-    public void receive(ChannelHandlerContext ctx, ByteBuf buf, Runnable callback) throws Exception {
+    public void receive(ChannelHandlerContext ctx, ByteBuf buf, CallbackInfo callback) throws Exception {
         //77 / 14 (символов) = (/request 1.txt)<= тут 14 символов
         //сигнальный байт/ /request / 1.txt
         currentState = State.COMMAND_LENGTH;//входим в состояние ожидания = > длины команды
@@ -32,14 +32,16 @@ public class CommandHandler {
         }
         if (currentState ==  State.COMMAND) {//если в состоянии (ожидания типа команды)
             while (buf.readableBytes() > 0) {//и в буфере что то есть
-                cmd.append((char)buf.readByte());//todo а как же кириллица?
+                cmd.append((char)buf.readByte());
                 receivedLength++;
                 if (receivedLength == commandTypeLength) {//если получили столько байт сколько и ждали
                     parseCmd(ctx, cmd.toString());//парсим строчку
                     currentState = State.IDLE;
                     //сообщаем => закончили получать файл, чтобы тот кто кидает кусками данные понял
                     // что мы закончили выполнять операцию
-                    callback.run();
+
+                    callback.execute();
+
                     return;
                 }
             }
