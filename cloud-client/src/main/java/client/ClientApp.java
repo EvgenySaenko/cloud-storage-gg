@@ -21,19 +21,9 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
-public class ClientApp extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        primaryStage.setTitle("Cloud Storage");
-        primaryStage.setScene(new Scene(root,1100,550));
-        primaryStage.show();
-    }
+public class ClientApp{
 
     public static void main(String[] args) {
-        launch(args);
-
         CountDownLatch connectionOpened = new CountDownLatch(1);
         new Thread(() ->  Network.getInstance().start(connectionOpened)).start();
         try {
@@ -41,7 +31,6 @@ public class ClientApp extends Application {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
 
         Scanner sc = new Scanner(System.in);
         while (true){

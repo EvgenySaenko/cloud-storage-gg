@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="center" style="-fx-background-color: #32CD32;" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.MainApp" >
+<VBox alignment="center" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      fx:controller="client.Controller">
 
     <MenuBar prefHeight="25.0" prefWidth="457.0" style="-fx-background-color: #353535;">
         <Menu text="File">
-            <MenuItem onAction="#btnExitAction" text="Выйти из программы" />
+            <MenuItem text="Выйти из программы" />
         </Menu>
     </MenuBar>
 
     <HBox>
-        <ComboBox style="-fx-background-color: #353535;" />
+        <ComboBox fx:id="disksBox" style="-fx-background-color: #353535;" />
         <TextField editable="false" HBox.hgrow="ALWAYS" />
         <Button style="-fx-background-color: #353535;" text="UP" textFill="LIMEGREEN" />
     </HBox>
 
+    <TableView fx:id="filesTable" style="-fx-background-color: #353535;" VBox.vgrow="ALWAYS" />
 
-    <TableView style="-fx-background-color: #353535;" VBox.vgrow="ALWAYS" />
 
-
-    <HBox spacing="5">
-        <Button focusTraversable="false" maxWidth="Infinity" onAction="#copyBtnAction" style="-fx-background-color: #353535;;" text="Rename" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
-        <Button focusTraversable="false" maxWidth="Infinity" onAction="#moveBtnAction" style="-fx-background-color: #353535;;" text="Download" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
-        <Button focusTraversable="false" maxWidth="Infinity" onAction="#deleteBtnAction" style="-fx-background-color: #353535;;" text="Delete" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
+    <HBox spacing="3.0" style="-fx-background-color: LIMEGREEN;">
+        <Button focusTraversable="false" maxWidth="Infinity" style="-fx-background-color: #353535;;" text="Rename" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
+        <Button focusTraversable="false" maxWidth="Infinity" style="-fx-background-color: #353535;;" text="Download" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
+        <Button focusTraversable="false" maxWidth="Infinity" style="-fx-background-color: #353535;;" text="Delete" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
         <Button focusTraversable="false" maxWidth="Infinity" onAction="#btnExitAction" style="-fx-background-color: #353535;;" text="Exit" textFill="LIMEGREEN" HBox.hgrow="ALWAYS" />
-      <padding>
-         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-      </padding>
+        <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+        </padding>
 
     </HBox>
+
+
 
 
 
