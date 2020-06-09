@@ -1,5 +1,6 @@
 package client;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +30,8 @@ public class FileInfo {
     public String getFilename() {
         return filename;
     }
+
+
 
     public FileType getType() {
         return type;

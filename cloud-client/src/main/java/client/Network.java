@@ -1,6 +1,9 @@
 package client;
 
+import common.CommandsList;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -10,6 +13,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 
 public class Network {
@@ -37,7 +41,7 @@ public class Network {
                     .remoteAddress(new InetSocketAddress("localhost", 8189))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new FIleHandler());
+                            socketChannel.pipeline().addLast(new ClientFIleHandler());
                             currentChannel = socketChannel;
 
                         }
@@ -59,5 +63,16 @@ public class Network {
 
     public void stop() {
         currentChannel.close();
+    }
+
+    //посылает команду на сервер
+    public static void sendFileRequest(String filename, Channel outChannel){
+        byte [] filenameBytes = ("/request " + filename).getBytes(StandardCharsets.UTF_8);//вычитываем байты из имени файла
+        //1 (SIGNAL BYTES) + 4 FILENAME_LENGTH(int) + FILENAME + FILE_LENGTH(long)
+        ByteBuf buf = ByteBufAllocator.DEFAULT.directBuffer(1 + 4 + filenameBytes.length);//собираем количество байт в посылке
+        buf.writeByte(CommandsList.CMD_SIGNAL_BYTE);//кладем сигнальный байт в буфер
+        buf.writeInt(filenameBytes.length);//в буфер длину имени
+        buf.writeBytes(filenameBytes);//само имя
+        outChannel.writeAndFlush(buf);
     }
 }

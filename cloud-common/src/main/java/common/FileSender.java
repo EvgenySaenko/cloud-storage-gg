@@ -12,7 +12,7 @@ import java.nio.file.Path;
 
 public class FileSender {
     //отправляем файлы
-    public static void sendFile(Path path, Channel channel, ChannelFutureListener finishListener) throws IOException {
+    public static void sendFile(Path path, Channel outChannel, ChannelFutureListener finishListener) throws IOException {
         FileRegion region = new DefaultFileRegion(path.toFile(), 0, Files.size(path));
         byte [] filenameBytes = path.getFileName().toString().getBytes(StandardCharsets.UTF_8);
         //1 (SIGNAL BYTES) + 4 FILENAME_LENGTH(int) + FILENAME + FILE_LENGTH(long)
@@ -21,9 +21,9 @@ public class FileSender {
         buf.writeInt(filenameBytes.length);
         buf.writeBytes(filenameBytes);
         buf.writeLong(Files.size(path));
-        channel.writeAndFlush(buf);
+        outChannel.writeAndFlush(buf);
 
-        ChannelFuture transferOperationFuture = channel.writeAndFlush(region);
+        ChannelFuture transferOperationFuture = outChannel.writeAndFlush(region);
 
         if (finishListener != null) {
             transferOperationFuture.addListener(finishListener);

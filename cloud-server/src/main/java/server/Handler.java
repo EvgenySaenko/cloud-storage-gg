@@ -17,8 +17,6 @@ public class Handler extends ChannelInboundHandlerAdapter {
     private FileHandler fileHandler;
     private CallbackInfo callback;
 
-
-
     public Handler(){//получает дефолт статус и обработчик команд и фалов
         this.status = ReceptionStatus.IDLE;
         this.cmdHandler = new CommandHandler();
@@ -27,6 +25,7 @@ public class Handler extends ChannelInboundHandlerAdapter {
             System.out.println("Файл успешно получен");
             this.status = ReceptionStatus.IDLE;
         };
+
     }
 
     @Override
@@ -34,24 +33,31 @@ public class Handler extends ChannelInboundHandlerAdapter {
         ByteBuf buf = ((ByteBuf) msg);
         while (buf.readableBytes() > 0) {
             if (this.status == ReceptionStatus.IDLE) {//если статус дефолт
-                byte signalByte= buf.readByte();
+                byte signalByte = buf.readByte();
                 if (signalByte == CommandsList.FILE_SIGNAL_BYTE) {
                     status = ReceptionStatus.FILE;//статус получения файла
-                    fileHandler.receive(ctx,buf,callback);//вызываем обработчик файлов
-                    System.out.println("STATE: Start file receiving");
-                }
-                if (signalByte == CommandsList.CMD_SIGNAL_BYTE) {
+                    fileHandler.startReceive();//вызываем обработчик файлов
+                }else if (signalByte == CommandsList.CMD_SIGNAL_BYTE) {
                     status = ReceptionStatus.COMMAND;//статус получения команды
                     //то вызываем метод ресив обработчика команд
-                    cmdHandler.receive(ctx, buf, callback);//вызываем обработчик команд
-                    System.out.println("STATE: Start command receiving ");
+                    cmdHandler.startReceive();
                 }
             }
+            if (status == ReceptionStatus.FILE){
+                fileHandler.receive(ctx,buf,callback);//вызываем обработчик файлов
+            }
+            if (status == ReceptionStatus.COMMAND){
+                cmdHandler.receive(ctx, buf, callback);//вызываем обработчик команд
+            }
+
+
         }
 
         if (buf.readableBytes() == 0) {
             buf.release();
         }
+
+
     }
 
     @Override

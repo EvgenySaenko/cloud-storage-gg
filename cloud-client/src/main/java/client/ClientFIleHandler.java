@@ -8,7 +8,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 
-public class FIleHandler extends ChannelInboundHandlerAdapter {
+public class ClientFIleHandler extends ChannelInboundHandlerAdapter {
     public enum State {
         IDLE, NAME_LENGTH, NAME, FILE_LENGTH, FILE
     }
